@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SleepTone · 42 Immersive Soundscapes for Sleep & Focus</title>
+<meta name="description" content="A curated sound environment app. 42 atmospheric soundscapes across 6 categories. Mix sounds, set a timer, drift away. Offline. Premium. Calm.">
+
+<meta property="og:title" content="SleepTone · Soundscapes for Sleep & Focus">
+<meta property="og:description" content="42 immersive sounds. Mix your own. Set a timer. Sleep.">
+<meta property="og:image" content="https://qai-apps.github.io/sleeptone/get/assets/hero-bg.webp">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://qai-apps.github.io/sleeptone/get/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#09090b">
+
+<link rel="icon" type="image/webp" href="assets/app-icon.webp">
+<link rel="apple-touch-icon" href="assets/app-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ────────────────────────────────
+   Tokens
+   ──────────────────────────────── */
+:root {
+  /* OKLCH palette, tinted toward brand purple 285° */
+  --bg:       oklch(0.13 0.018 285);
+  --bg-deep:  oklch(0.09 0.015 285);
+  --surface:  oklch(0.20 0.025 285);
+  --border:   oklch(0.32 0.03  285 / 0.6);
+  --text:     oklch(0.97 0.008 285);
+  --text-dim: oklch(0.72 0.02  285);
+  --text-faint: oklch(0.52 0.02 285);
+  --accent:     oklch(0.72 0.16  285);   /* ≈ #A78BFA */
+  --accent-hi:  oklch(0.80 0.14  285);
+  --accent-lo:  oklch(0.54 0.17  285);
+  --cool:       oklch(0.78 0.11  260);   /* blue whisper */
+
+  /* Spacing (4pt, semantic) */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 6rem;
+
+  /* Radii */
+  --r-sm: 6px;
+  --r-md: 12px;
+  --r-lg: 20px;
+  --r-pill: 999px;
+
+  /* Easing */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo:  cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: 'Manrope', system-ui, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text);
+  font-weight: 400;
+  line-height: 1.55;
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* ────────────────────────────────
+   Hero — atmospheric full-bleed
+   ──────────────────────────────── */
+.hero {
+  position: relative;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1.5rem, 5vw, 5rem);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('assets/hero-bg.webp');
+  background-size: cover;
+  background-position: center 35%;
+  filter: saturate(0.85) brightness(0.55);
+  z-index: -2;
+  animation: heroDrift 22s ease-in-out infinite alternate;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 120%, oklch(0.18 0.08 285 / 0.7), transparent 55%),
+    radial-gradient(ellipse at 110% -20%, oklch(0.22 0.05 260 / 0.45), transparent 50%),
+    linear-gradient(180deg, oklch(0.09 0.02 285 / 0.25) 0%, oklch(0.08 0.02 285 / 0.85) 100%);
+  z-index: -1;
+}
+
+@keyframes heroDrift {
+  from { transform: scale(1.02) translateY(0); }
+  to   { transform: scale(1.08) translateY(-1.5%); }
+}
+
+/* ────────────────────────────────
+   Top row — wordmark + nav
+   ──────────────────────────────── */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 0;
+  animation: fadeUp 900ms var(--ease-out-expo) 150ms forwards;
+}
+
+.wordmark {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: 'Italiana', serif;
+  font-size: 1.35rem;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.wordmark-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.top-nav {
+  display: flex;
+  gap: var(--space-lg);
+  font-size: 0.875rem;
+  color: var(--text-dim);
+}
+
+.top-nav a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 180ms var(--ease-out-quart);
+}
+
+.top-nav a:hover { color: var(--text); }
+
+@media (max-width: 540px) {
+  .top-nav { display: none; }
+}
+
+/* ────────────────────────────────
+   Center column — headline
+   ──────────────────────────────── */
+.center {
+  align-self: center;
+  max-width: 780px;
+  padding: var(--space-2xl) 0;
+}
+
+.eyebrow {
+  font-size: 0.8125rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-hi);
+  margin-bottom: var(--space-lg);
+  opacity: 0;
+  animation: fadeUp 900ms var(--ease-out-expo) 350ms forwards;
+}
+
+.headline {
+  font-family: 'Italiana', serif;
+  font-weight: 400;
+  font-size: clamp(2.6rem, 7vw, 5.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  margin-bottom: var(--space-lg);
+  opacity: 0;
+  animation: fadeUp 1100ms var(--ease-out-expo) 500ms forwards;
+}
+
+.headline em {
+  font-style: italic;
+  color: var(--accent-hi);
+  font-weight: 400;
+}
+
+.subhead {
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--text-dim);
+  max-width: 54ch;
+  margin-bottom: var(--space-2xl);
+  font-weight: 300;
+  opacity: 0;
+  animation: fadeUp 900ms var(--ease-out-expo) 700ms forwards;
+}
+
+/* ────────────────────────────────
+   CTA group
+   ──────────────────────────────── */
+.cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  align-items: center;
+  opacity: 0;
+  animation: fadeUp 900ms var(--ease-out-expo) 900ms forwards;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.95rem 1.6rem;
+  border-radius: var(--r-pill);
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    transform 220ms var(--ease-out-quart),
+    background-color 220ms var(--ease-out-quart),
+    border-color 220ms var(--ease-out-quart),
+    color 220ms var(--ease-out-quart);
+  will-change: transform;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent-hi);
+  outline-offset: 3px;
+}
+
+.btn-primary {
+  background: var(--text);
+  color: var(--bg-deep);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hi);
+  color: var(--bg-deep);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: oklch(0.22 0.02 285 / 0.55);
+  color: var(--text);
+  border-color: var(--border);
+  backdrop-filter: blur(14px) saturate(1.1);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1);
+}
+
+.btn-secondary:hover {
+  background: oklch(0.28 0.03 285 / 0.7);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.btn-icon {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.75;
+}
+
+.cta-note {
+  font-size: 0.8125rem;
+  color: var(--text-faint);
+  margin-top: var(--space-md);
+  letter-spacing: 0.02em;
+}
+
+/* ────────────────────────────────
+   Bottom row — feature strip + footer
+   ──────────────────────────────── */
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+  align-items: end;
+  justify-content: space-between;
+  padding-top: var(--space-xl);
+  opacity: 0;
+  animation: fadeUp 900ms var(--ease-out-expo) 1100ms forwards;
+}
+
+.features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  font-size: 0.84rem;
+  color: var(--text-dim);
+}
+
+.feature {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.feature-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  transform: translateY(-2px);
+}
+
+.footer-links {
+  display: flex;
+  gap: var(--space-md);
+  font-size: 0.8125rem;
+  color: var(--text-faint);
+}
+
+.footer-links a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 180ms var(--ease-out-quart);
+}
+
+.footer-links a:hover { color: var(--text-dim); }
+
+/* ────────────────────────────────
+   Waitlist modal
+   ──────────────────────────────── */
+.waitlist-overlay {
+  position: fixed;
+  inset: 0;
+  background: oklch(0.06 0.01 285 / 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md);
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 280ms var(--ease-out-quart);
+}
+
+.waitlist-overlay[data-open="true"] {
+  display: flex;
+  opacity: 1;
+}
+
+.waitlist-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  max-width: 440px;
+  width: 100%;
+  position: relative;
+  transform: translateY(12px);
+  transition: transform 320ms var(--ease-out-expo);
+}
+
+.waitlist-overlay[data-open="true"] .waitlist-card {
+  transform: translateY(0);
+}
+
+.waitlist-title {
+  font-family: 'Italiana', serif;
+  font-size: 1.85rem;
+  line-height: 1.1;
+  margin-bottom: var(--space-sm);
+}
+
+.waitlist-desc {
+  color: var(--text-dim);
+  font-size: 0.94rem;
+  line-height: 1.55;
+  margin-bottom: var(--space-lg);
+}
+
+.waitlist-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.waitlist-input {
+  padding: 0.85rem 1rem;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: border-color 180ms var(--ease-out-quart);
+}
+
+.waitlist-input::placeholder { color: var(--text-faint); }
+
+.waitlist-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.waitlist-submit {
+  padding: 0.9rem 1.4rem;
+  background: var(--text);
+  color: var(--bg-deep);
+  border: none;
+  border-radius: var(--r-pill);
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 220ms var(--ease-out-quart), color 220ms var(--ease-out-quart);
+}
+
+.waitlist-submit:hover {
+  background: var(--accent-hi);
+}
+
+.waitlist-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  cursor: pointer;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  transition: background 180ms var(--ease-out-quart), color 180ms var(--ease-out-quart);
+}
+
+.waitlist-close:hover {
+  background: var(--border);
+  color: var(--text);
+}
+
+.waitlist-success {
+  padding: var(--space-lg);
+  text-align: center;
+  color: var(--accent-hi);
+  font-family: 'Italiana', serif;
+  font-size: 1.35rem;
+  display: none;
+}
+
+.waitlist-card[data-state="success"] .waitlist-form { display: none; }
+.waitlist-card[data-state="success"] .waitlist-desc { display: none; }
+.waitlist-card[data-state="success"] .waitlist-success { display: block; }
+
+/* ────────────────────────────────
+   Entrance animation
+   ──────────────────────────────── */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ────────────────────────────────
+   Mobile tuning
+   ──────────────────────────────── */
+@media (max-width: 720px) {
+  .hero {
+    padding: 1.25rem 1.1rem;
+  }
+  .center {
+    min-width: 0;
+    padding: var(--space-xl) 0;
+  }
+  .headline {
+    font-size: clamp(2rem, 8.5vw, 3rem);
+    letter-spacing: -0.01em;
+    overflow-wrap: break-word;
+  }
+  .subhead {
+    font-size: 0.98rem;
+    max-width: 100%;
+  }
+  .cta-group {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn {
+    justify-content: center;
+    padding: 0.95rem 1.2rem;
+    width: 100%;
+  }
+  .bottom {
+    flex-direction: column;
+    align-items: start;
+    gap: var(--space-md);
+  }
+  .features {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<section class="hero" aria-label="SleepTone">
+
+  <!-- Top bar -->
+  <header class="top">
+    <a class="wordmark" href="/">
+      <img class="wordmark-icon" src="assets/app-icon.webp" alt="" aria-hidden="true">
+      <span>SleepTone</span>
+    </a>
+    <nav class="top-nav" aria-label="Quick links">
+      <a href="#privacy">Privacy</a>
+      <a href="#terms">Terms</a>
+      <a href="mailto:qai.apps.dev@gmail.com">Contact</a>
+    </nav>
+  </header>
+
+  <!-- Center column -->
+  <div class="center">
+    <div class="eyebrow">42 Soundscapes · 6 Categories · Offline</div>
+
+    <h1 class="headline">
+      Sound environments<br>
+      you can <em>visit.</em>
+    </h1>
+
+    <p class="subhead">
+      A curated sound environment app for sleep, focus, and deep calm. Mix rain,
+      singing bowls, cat purrs, night trains, campfire crackle. Set a timer. Drift away.
+    </p>
+
+    <div class="cta-group">
+      <a class="btn btn-primary"
+         href="https://apps.apple.com/us/app/sleeptone/id6761876581"
+         data-platform="ios">
+        <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M17.05 13.27c-.03-3.06 2.5-4.52 2.62-4.59-1.43-2.09-3.66-2.38-4.45-2.41-1.89-.19-3.7 1.12-4.66 1.12-.98 0-2.45-1.1-4.04-1.07-2.06.03-3.98 1.2-5.05 3.06-2.17 3.76-.55 9.33 1.54 12.4 1.03 1.5 2.25 3.19 3.84 3.13 1.55-.06 2.13-1 4-1 1.86 0 2.4 1 4.04.97 1.67-.03 2.73-1.52 3.75-3.03 1.19-1.74 1.68-3.44 1.7-3.52-.04-.02-3.26-1.25-3.29-4.97z"/>
+          <path d="M14.36 4.09c.84-1.02 1.41-2.44 1.26-3.85-1.21.05-2.69.82-3.56 1.84-.78.9-1.46 2.34-1.28 3.73 1.35.1 2.73-.69 3.58-1.72z"/>
+        </svg>
+        Download on iOS
+      </a>
+
+      <button class="btn btn-secondary" type="button" data-open-waitlist>
+        <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85a.63.63 0 00-.83.22l-1.88 3.24a11.43 11.43 0 00-8.94 0L5.65 5.67a.63.63 0 00-.87-.2c-.28.18-.38.54-.22.83L6.4 9.48A10.8 10.8 0 001 18h22a10.8 10.8 0 00-5.4-8.52zM7 15.25a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm10 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z"/>
+        </svg>
+        Notify me on Android
+      </button>
+    </div>
+
+    <p class="cta-note">No account. No bloat. Free with in-app purchase.</p>
+  </div>
+
+  <!-- Bottom row -->
+  <footer class="bottom">
+    <div class="features" aria-label="Features">
+      <span class="feature"><span class="feature-dot"></span>Sleep timer with fade-out</span>
+      <span class="feature"><span class="feature-dot"></span>Mix up to 5 sounds</span>
+      <span class="feature"><span class="feature-dot"></span>Works offline</span>
+    </div>
+    <nav class="footer-links" aria-label="Legal">
+      <a href="https://qai-apps.github.io/sleeptone/privacy.html">Privacy</a>
+      <a href="https://qai-apps.github.io/sleeptone/terms.html">Terms</a>
+      <a href="mailto:qai.apps.dev@gmail.com">qai.apps.dev@gmail.com</a>
+    </nav>
+  </footer>
+
+</section>
+
+<!-- Waitlist modal -->
+<div class="waitlist-overlay" id="waitlistOverlay" role="dialog" aria-modal="true" aria-labelledby="waitlistTitle">
+  <div class="waitlist-card" data-state="idle">
+    <button class="waitlist-close" type="button" aria-label="Close" data-close-waitlist>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M6 6l12 12M6 18L18 6"/>
+      </svg>
+    </button>
+    <h2 class="waitlist-title" id="waitlistTitle">Android is coming.</h2>
+    <p class="waitlist-desc">
+      We'll email you the moment SleepTone lands on Google Play. One message. No lists.
+    </p>
+    <form class="waitlist-form" id="waitlistForm"
+          action="https://formspree.io/f/xdaybkqr"
+          method="POST">
+      <input class="waitlist-input" type="email" name="email"
+             placeholder="you@example.com" required autocomplete="email">
+      <input type="hidden" name="_subject" value="SleepTone · Android waitlist">
+      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+      <button class="waitlist-submit" type="submit">Join waitlist</button>
+    </form>
+    <div class="waitlist-success">
+      ✓ You're on the list.
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const overlay = document.getElementById('waitlistOverlay');
+  const card = overlay.querySelector('.waitlist-card');
+  const form = document.getElementById('waitlistForm');
+  const openers = document.querySelectorAll('[data-open-waitlist]');
+  const closers = document.querySelectorAll('[data-close-waitlist]');
+
+  const open = () => {
+    overlay.dataset.open = 'true';
+    overlay.querySelector('input[type=email]')?.focus();
+  };
+  const close = () => {
+    overlay.dataset.open = 'false';
+    setTimeout(() => { card.dataset.state = 'idle'; form.reset(); }, 300);
+  };
+
+  openers.forEach(el => el.addEventListener('click', open));
+  closers.forEach(el => el.addEventListener('click', close));
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.dataset.open === 'true') close();
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        card.dataset.state = 'success';
+        setTimeout(close, 2400);
+      } else {
+        alert('Something went wrong. Please try again or email qai.apps.dev@gmail.com');
+      }
+    } catch {
+      // Fallback if Formspree isn't set up yet — fall back to mailto
+      window.location.href = `mailto:qai.apps.dev@gmail.com?subject=SleepTone%20Android%20waitlist&body=Please%20notify%20me%20at%3A%20${encodeURIComponent(data.get('email'))}`;
+    }
+  });
+
+  // Platform-aware primary CTA tweak: hide iOS-only if clearly non-iOS?
+  // Kept inclusive — desktop users still click and see the App Store page.
+})();
+</script>
+
+</body>
+</html>
