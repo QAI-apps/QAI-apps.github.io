@@ -26,7 +26,6 @@
    Tokens
    ──────────────────────────────── */
 :root {
-  /* OKLCH palette, tinted toward brand purple 285° */
   --bg:       oklch(0.13 0.018 285);
   --bg-deep:  oklch(0.09 0.015 285);
   --surface:  oklch(0.20 0.025 285);
@@ -34,12 +33,11 @@
   --text:     oklch(0.97 0.008 285);
   --text-dim: oklch(0.72 0.02  285);
   --text-faint: oklch(0.52 0.02 285);
-  --accent:     oklch(0.72 0.16  285);   /* ≈ #A78BFA */
+  --accent:     oklch(0.72 0.16  285);
   --accent-hi:  oklch(0.80 0.14  285);
   --accent-lo:  oklch(0.54 0.17  285);
-  --cool:       oklch(0.78 0.11  260);   /* blue whisper */
+  --cool:       oklch(0.78 0.11  260);
 
-  /* Spacing (4pt, semantic) */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;
@@ -48,13 +46,11 @@
   --space-2xl: 4rem;
   --space-3xl: 6rem;
 
-  /* Radii */
   --r-sm: 6px;
   --r-md: 12px;
   --r-lg: 20px;
   --r-pill: 999px;
 
-  /* Easing */
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo:  cubic-bezier(0.19, 1, 0.22, 1);
 }
@@ -86,7 +82,7 @@ body {
 }
 
 /* ────────────────────────────────
-   Hero — atmospheric full-bleed
+   Hero
    ──────────────────────────────── */
 .hero {
   position: relative;
@@ -127,7 +123,7 @@ body {
 }
 
 /* ────────────────────────────────
-   Top row — wordmark + nav
+   Top row
    ──────────────────────────────── */
 .top {
   display: flex;
@@ -175,7 +171,7 @@ body {
 }
 
 /* ────────────────────────────────
-   Center column — headline
+   Center column
    ──────────────────────────────── */
 .center {
   align-self: center;
@@ -292,6 +288,13 @@ body {
   stroke-width: 1.75;
 }
 
+.btn-icon-fill {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  stroke: none;
+}
+
 .cta-note {
   font-size: 0.8125rem;
   color: var(--text-faint);
@@ -299,8 +302,55 @@ body {
   letter-spacing: 0.02em;
 }
 
+.apk-meta {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  margin-top: var(--space-sm);
+  letter-spacing: 0.01em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+}
+
 /* ────────────────────────────────
-   Bottom row — feature strip + footer
+   Install hint banner
+   ──────────────────────────────── */
+.install-hint {
+  margin-top: var(--space-xl);
+  padding: var(--space-md) var(--space-lg);
+  background: oklch(0.16 0.02 285 / 0.7);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  max-width: 520px;
+  opacity: 0;
+  animation: fadeUp 900ms var(--ease-out-expo) 1100ms forwards;
+}
+
+.install-hint-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-hi);
+  margin-bottom: var(--space-xs);
+}
+
+.install-hint-text {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+.install-hint-text ol {
+  margin: var(--space-xs) 0 0 1.2rem;
+}
+
+.install-hint-text li {
+  margin-bottom: 0.15rem;
+}
+
+/* ────────────────────────────────
+   Bottom row
    ──────────────────────────────── */
 .bottom {
   display: flex;
@@ -310,7 +360,7 @@ body {
   justify-content: space-between;
   padding-top: var(--space-xl);
   opacity: 0;
-  animation: fadeUp 900ms var(--ease-out-expo) 1100ms forwards;
+  animation: fadeUp 900ms var(--ease-out-expo) 1300ms forwards;
 }
 
 .features {
@@ -350,134 +400,6 @@ body {
 }
 
 .footer-links a:hover { color: var(--text-dim); }
-
-/* ────────────────────────────────
-   Waitlist modal
-   ──────────────────────────────── */
-.waitlist-overlay {
-  position: fixed;
-  inset: 0;
-  background: oklch(0.06 0.01 285 / 0.75);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-md);
-  z-index: 100;
-  opacity: 0;
-  transition: opacity 280ms var(--ease-out-quart);
-}
-
-.waitlist-overlay[data-open="true"] {
-  display: flex;
-  opacity: 1;
-}
-
-.waitlist-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r-lg);
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  max-width: 440px;
-  width: 100%;
-  position: relative;
-  transform: translateY(12px);
-  transition: transform 320ms var(--ease-out-expo);
-}
-
-.waitlist-overlay[data-open="true"] .waitlist-card {
-  transform: translateY(0);
-}
-
-.waitlist-title {
-  font-family: 'Italiana', serif;
-  font-size: 1.85rem;
-  line-height: 1.1;
-  margin-bottom: var(--space-sm);
-}
-
-.waitlist-desc {
-  color: var(--text-dim);
-  font-size: 0.94rem;
-  line-height: 1.55;
-  margin-bottom: var(--space-lg);
-}
-
-.waitlist-form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
-}
-
-.waitlist-input {
-  padding: 0.85rem 1rem;
-  background: var(--bg-deep);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  color: var(--text);
-  font-family: inherit;
-  font-size: 0.95rem;
-  transition: border-color 180ms var(--ease-out-quart);
-}
-
-.waitlist-input::placeholder { color: var(--text-faint); }
-
-.waitlist-input:focus {
-  outline: none;
-  border-color: var(--accent);
-}
-
-.waitlist-submit {
-  padding: 0.9rem 1.4rem;
-  background: var(--text);
-  color: var(--bg-deep);
-  border: none;
-  border-radius: var(--r-pill);
-  font-family: inherit;
-  font-weight: 500;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background 220ms var(--ease-out-quart), color 220ms var(--ease-out-quart);
-}
-
-.waitlist-submit:hover {
-  background: var(--accent-hi);
-}
-
-.waitlist-close {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: transparent;
-  color: var(--text-dim);
-  cursor: pointer;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  transition: background 180ms var(--ease-out-quart), color 180ms var(--ease-out-quart);
-}
-
-.waitlist-close:hover {
-  background: var(--border);
-  color: var(--text);
-}
-
-.waitlist-success {
-  padding: var(--space-lg);
-  text-align: center;
-  color: var(--accent-hi);
-  font-family: 'Italiana', serif;
-  font-size: 1.35rem;
-  display: none;
-}
-
-.waitlist-card[data-state="success"] .waitlist-form { display: none; }
-.waitlist-card[data-state="success"] .waitlist-desc { display: none; }
-.waitlist-card[data-state="success"] .waitlist-success { display: block; }
 
 /* ────────────────────────────────
    Entrance animation
@@ -531,6 +453,9 @@ body {
   .features {
     width: 100%;
   }
+  .install-hint {
+    max-width: 100%;
+  }
 }
 </style>
 </head>
@@ -567,24 +492,41 @@ body {
 
     <div class="cta-group">
       <a class="btn btn-primary"
-         href="https://apps.apple.com/us/app/sleeptone/id6761876581"
-         data-platform="ios">
-        <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+         href="https://apps.apple.com/us/app/sleeptone/id6761876581">
+        <svg class="btn-icon-fill" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M17.05 13.27c-.03-3.06 2.5-4.52 2.62-4.59-1.43-2.09-3.66-2.38-4.45-2.41-1.89-.19-3.7 1.12-4.66 1.12-.98 0-2.45-1.1-4.04-1.07-2.06.03-3.98 1.2-5.05 3.06-2.17 3.76-.55 9.33 1.54 12.4 1.03 1.5 2.25 3.19 3.84 3.13 1.55-.06 2.13-1 4-1 1.86 0 2.4 1 4.04.97 1.67-.03 2.73-1.52 3.75-3.03 1.19-1.74 1.68-3.44 1.7-3.52-.04-.02-3.26-1.25-3.29-4.97z"/>
           <path d="M14.36 4.09c.84-1.02 1.41-2.44 1.26-3.85-1.21.05-2.69.82-3.56 1.84-.78.9-1.46 2.34-1.28 3.73 1.35.1 2.73-.69 3.58-1.72z"/>
         </svg>
         Download on iOS
       </a>
 
-      <button class="btn btn-secondary" type="button" data-open-waitlist>
-        <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <a class="btn btn-secondary" id="apkDownload"
+         href="https://github.com/QAI-apps/QAI-apps.github.io/releases/download/sleeptone-v1.0.6/SleepTone-v1.0.6.apk">
+        <svg class="btn-icon-fill" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85a.63.63 0 00-.83.22l-1.88 3.24a11.43 11.43 0 00-8.94 0L5.65 5.67a.63.63 0 00-.87-.2c-.28.18-.38.54-.22.83L6.4 9.48A10.8 10.8 0 001 18h22a10.8 10.8 0 00-5.4-8.52zM7 15.25a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm10 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z"/>
         </svg>
-        Notify me on Android
-      </button>
+        Download APK
+      </a>
+    </div>
+
+    <div class="apk-meta">
+      <span>Android · v1.0.6</span>
+      <span>Requires Android 5.0+</span>
     </div>
 
     <p class="cta-note">No account. No bloat. Free with in-app purchase.</p>
+
+    <div class="install-hint">
+      <div class="install-hint-title">First time installing an APK?</div>
+      <div class="install-hint-text">
+        <ol>
+          <li>Tap <strong>Download APK</strong> above</li>
+          <li>Open the downloaded file</li>
+          <li>If prompted, allow installation from this source</li>
+          <li>Tap <strong>Install</strong></li>
+        </ol>
+      </div>
+    </div>
   </div>
 
   <!-- Bottom row -->
@@ -602,83 +544,6 @@ body {
   </footer>
 
 </section>
-
-<!-- Waitlist modal -->
-<div class="waitlist-overlay" id="waitlistOverlay" role="dialog" aria-modal="true" aria-labelledby="waitlistTitle">
-  <div class="waitlist-card" data-state="idle">
-    <button class="waitlist-close" type="button" aria-label="Close" data-close-waitlist>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M6 6l12 12M6 18L18 6"/>
-      </svg>
-    </button>
-    <h2 class="waitlist-title" id="waitlistTitle">Android is coming.</h2>
-    <p class="waitlist-desc">
-      We'll email you the moment SleepTone lands on Google Play. One message. No lists.
-    </p>
-    <form class="waitlist-form" id="waitlistForm"
-          action="https://formspree.io/f/xdaybkqr"
-          method="POST">
-      <input class="waitlist-input" type="email" name="email"
-             placeholder="you@example.com" required autocomplete="email">
-      <input type="hidden" name="_subject" value="SleepTone · Android waitlist">
-      <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-      <button class="waitlist-submit" type="submit">Join waitlist</button>
-    </form>
-    <div class="waitlist-success">
-      ✓ You're on the list.
-    </div>
-  </div>
-</div>
-
-<script>
-(() => {
-  const overlay = document.getElementById('waitlistOverlay');
-  const card = overlay.querySelector('.waitlist-card');
-  const form = document.getElementById('waitlistForm');
-  const openers = document.querySelectorAll('[data-open-waitlist]');
-  const closers = document.querySelectorAll('[data-close-waitlist]');
-
-  const open = () => {
-    overlay.dataset.open = 'true';
-    overlay.querySelector('input[type=email]')?.focus();
-  };
-  const close = () => {
-    overlay.dataset.open = 'false';
-    setTimeout(() => { card.dataset.state = 'idle'; form.reset(); }, 300);
-  };
-
-  openers.forEach(el => el.addEventListener('click', open));
-  closers.forEach(el => el.addEventListener('click', close));
-  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && overlay.dataset.open === 'true') close();
-  });
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      });
-      if (res.ok) {
-        card.dataset.state = 'success';
-        setTimeout(close, 2400);
-      } else {
-        alert('Something went wrong. Please try again or email qai.apps.dev@gmail.com');
-      }
-    } catch {
-      // Fallback if Formspree isn't set up yet — fall back to mailto
-      window.location.href = `mailto:qai.apps.dev@gmail.com?subject=SleepTone%20Android%20waitlist&body=Please%20notify%20me%20at%3A%20${encodeURIComponent(data.get('email'))}`;
-    }
-  });
-
-  // Platform-aware primary CTA tweak: hide iOS-only if clearly non-iOS?
-  // Kept inclusive — desktop users still click and see the App Store page.
-})();
-</script>
 
 </body>
 </html>
