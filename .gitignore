@@ -1,0 +1,5 @@
+# OMC orchestration runtime state — never commit
+.omc/
+
+# macOS
+.DS_Store
