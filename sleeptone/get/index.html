@@ -280,14 +280,6 @@ body {
   transform: translateY(-1px);
 }
 
-.btn-icon {
-  width: 18px;
-  height: 18px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.75;
-}
-
 .btn-icon-fill {
   width: 18px;
   height: 18px;
@@ -302,7 +294,7 @@ body {
   letter-spacing: 0.02em;
 }
 
-.apk-meta {
+.platform-meta {
   font-size: 0.78rem;
   color: var(--text-faint);
   margin-top: var(--space-sm);
@@ -310,43 +302,6 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 0.3rem 1rem;
-}
-
-/* ────────────────────────────────
-   Install hint banner
-   ──────────────────────────────── */
-.install-hint {
-  margin-top: var(--space-xl);
-  padding: var(--space-md) var(--space-lg);
-  background: oklch(0.16 0.02 285 / 0.7);
-  border: 1px solid var(--border);
-  border-radius: var(--r-md);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  max-width: 520px;
-  opacity: 0;
-  animation: fadeUp 900ms var(--ease-out-expo) 1100ms forwards;
-}
-
-.install-hint-title {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--accent-hi);
-  margin-bottom: var(--space-xs);
-}
-
-.install-hint-text {
-  font-size: 0.82rem;
-  color: var(--text-dim);
-  line-height: 1.6;
-}
-
-.install-hint-text ol {
-  margin: var(--space-xs) 0 0 1.2rem;
-}
-
-.install-hint-text li {
-  margin-bottom: 0.15rem;
 }
 
 /* ────────────────────────────────
@@ -453,9 +408,6 @@ body {
   .features {
     width: 100%;
   }
-  .install-hint {
-    max-width: 100%;
-  }
 }
 </style>
 </head>
@@ -500,33 +452,22 @@ body {
         Download on iOS
       </a>
 
-      <a class="btn btn-secondary" id="apkDownload"
-         href="https://github.com/QAI-apps/QAI-apps.github.io/releases/download/sleeptone-v1.0.6/SleepTone-v1.0.6.apk">
+      <a class="btn btn-secondary"
+         href="https://play.google.com/store/apps/details?id=com.qai.sleeptone">
         <svg class="btn-icon-fill" viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85a.63.63 0 00-.83.22l-1.88 3.24a11.43 11.43 0 00-8.94 0L5.65 5.67a.63.63 0 00-.87-.2c-.28.18-.38.54-.22.83L6.4 9.48A10.8 10.8 0 001 18h22a10.8 10.8 0 00-5.4-8.52zM7 15.25a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5zm10 0a1.25 1.25 0 110-2.5 1.25 1.25 0 010 2.5z"/>
+          <path d="M8 5v14l11-7z"/>
         </svg>
-        Download APK
+        Get it on Google Play
       </a>
     </div>
 
-    <div class="apk-meta">
-      <span>Android · v1.0.6</span>
-      <span>Requires Android 5.0+</span>
+    <div class="platform-meta">
+      <span>iOS · v1.0.9</span>
+      <span>Android · v1.0.9</span>
+      <span>Requires iOS 13+ / Android 5.0+</span>
     </div>
 
     <p class="cta-note">No account. No bloat. Free with in-app purchase.</p>
-
-    <div class="install-hint">
-      <div class="install-hint-title">First time installing an APK?</div>
-      <div class="install-hint-text">
-        <ol>
-          <li>Tap <strong>Download APK</strong> above</li>
-          <li>Open the downloaded file</li>
-          <li>If prompted, allow installation from this source</li>
-          <li>Tap <strong>Install</strong></li>
-        </ol>
-      </div>
-    </div>
   </div>
 
   <!-- Bottom row -->
